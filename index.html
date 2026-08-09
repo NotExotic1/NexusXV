@@ -1,10 +1,963 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>NexusXV</title>
+
+    <meta name="description" content="Welcome to the official NexusXV website. Find my socials, games, projects and more.">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --background: #07070a;
+            --background-secondary: #0d0d12;
+            --card: rgba(20, 20, 28, 0.75);
+            --card-hover: rgba(29, 29, 40, 0.9);
+            --border: rgba(255, 255, 255, 0.09);
+            --text: #ffffff;
+            --text-secondary: #a5a5b3;
+            --accent: #8b5cf6;
+            --accent-light: #a78bfa;
+            --shadow: rgba(0, 0, 0, 0.45);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at 50% -10%, rgba(139, 92, 246, 0.22), transparent 35%),
+                radial-gradient(circle at 10% 40%, rgba(59, 130, 246, 0.08), transparent 30%),
+                var(--background);
+
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+
+            background-image:
+                linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+
+            background-size: 50px 50px;
+
+            mask-image: linear-gradient(to bottom, black, transparent 80%);
+        }
+
+        /* ==============================
+           NAVBAR
+        ============================== */
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 7%;
+
+            background: rgba(7, 7, 10, 0.72);
+            backdrop-filter: blur(18px);
+
+            border-bottom: 1px solid var(--border);
+
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--accent-light);
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        /* ==============================
+           HERO
+        ============================== */
+
+        .hero {
+            min-height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+
+            padding: 120px 20px 80px;
+
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 14px;
+
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            border-radius: 999px;
+
+            background: rgba(139, 92, 246, 0.08);
+
+            color: var(--accent-light);
+            font-size: 13px;
+            font-weight: 600;
+
+            margin-bottom: 25px;
+        }
+
+        .hero-badge::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #7cfc9a;
+            box-shadow: 0 0 12px #7cfc9a;
+        }
+
+        .hero h1 {
+            font-size: clamp(55px, 10vw, 110px);
+            line-height: 0.95;
+            letter-spacing: -6px;
+            font-weight: 900;
+
+            background: linear-gradient(
+                135deg,
+                #ffffff 20%,
+                #c4b5fd 50%,
+                #8b5cf6 100%
+            );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+
+            margin-bottom: 25px;
+        }
+
+        .hero p {
+            max-width: 650px;
+
+            color: var(--text-secondary);
+
+            font-size: 18px;
+            line-height: 1.7;
+
+            margin-bottom: 35px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 13px 21px;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            font-weight: 700;
+            font-size: 14px;
+
+            transition: 0.2s ease;
+        }
+
+        .button-primary {
+            background: white;
+            color: black;
+        }
+
+        .button-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.12);
+        }
+
+        .button-secondary {
+            background: rgba(255,255,255,0.05);
+            color: white;
+            border: 1px solid var(--border);
+        }
+
+        .button-secondary:hover {
+            background: rgba(255,255,255,0.09);
+            transform: translateY(-2px);
+        }
+
+        /* ==============================
+           MAIN CONTENT
+        ============================== */
+
+        main {
+            width: min(1100px, 90%);
+            margin: auto;
+            padding-bottom: 100px;
+        }
+
+        section {
+            margin-bottom: 90px;
+            scroll-margin-top: 100px;
+        }
+
+        .section-heading {
+            margin-bottom: 25px;
+        }
+
+        .section-heading h2 {
+            font-size: 30px;
+            letter-spacing: -1px;
+            margin-bottom: 7px;
+        }
+
+        .section-heading p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* ==============================
+           CARDS
+        ============================== */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .card {
+            position: relative;
+
+            padding: 25px;
+
+            min-height: 190px;
+
+            display: flex;
+            flex-direction: column;
+
+            border: 1px solid var(--border);
+            border-radius: 17px;
+
+            background: var(--card);
+
+            backdrop-filter: blur(15px);
+
+            text-decoration: none;
+            color: white;
+
+            overflow: hidden;
+
+            transition:
+                transform 0.25s ease,
+                background 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .card::before {
+            content: "";
+
+            position: absolute;
+            top: -100px;
+            right: -100px;
+
+            width: 200px;
+            height: 200px;
+
+            background: radial-gradient(
+                circle,
+                rgba(139,92,246,0.15),
+                transparent 70%
+            );
+
+            pointer-events: none;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            background: var(--card-hover);
+            border-color: rgba(139,92,246,0.35);
+
+            box-shadow:
+                0 15px 40px var(--shadow),
+                0 0 30px rgba(139,92,246,0.06);
+        }
+
+        .card-icon {
+            width: 45px;
+            height: 45px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background: rgba(139,92,246,0.12);
+
+            font-size: 21px;
+
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.6;
+
+            flex: 1;
+        }
+
+        .card-arrow {
+            margin-top: 18px;
+
+            color: var(--accent-light);
+
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* ==============================
+           FEATURE CARD
+        ============================== */
+
+        .feature {
+            padding: 35px;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(139,92,246,0.16),
+                    rgba(255,255,255,0.025)
+                );
+
+            border: 1px solid rgba(139,92,246,0.22);
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature::after {
+            content: "";
+
+            position: absolute;
+
+            width: 300px;
+            height: 300px;
+
+            right: -150px;
+            bottom: -180px;
+
+            background: radial-gradient(
+                circle,
+                rgba(139,92,246,0.25),
+                transparent 70%
+            );
+        }
+
+        .feature h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .feature p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 700px;
+        }
+
+        /* ==============================
+           FOOTER
+        ============================== */
+
+        footer {
+            border-top: 1px solid var(--border);
+
+            padding: 30px 20px;
+
+            text-align: center;
+
+            color: #666675;
+
+            font-size: 13px;
+        }
+
+        footer strong {
+            color: #9b9baa;
+        }
+
+        /* ==============================
+           MOBILE
+        ============================== */
+
+        @media (max-width: 800px) {
+
+            nav {
+                padding: 0 5%;
+            }
+
+            nav .links {
+                display: none;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                letter-spacing: -3px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .feature {
+                padding: 25px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <h1>NexusXV</h1>
-    <p>Welcome to my website!</p>
+
+    <!-- ==========================================
+         NAVIGATION
+    =========================================== -->
+
+    <nav>
+
+        <div class="logo">
+            Nexus<span>XV</span>
+        </div>
+
+        <div class="links">
+            <a href="#socials">Socials</a>
+            <a href="#gaming">Gaming</a>
+            <a href="#projects">Projects</a>
+            <a href="#other">Other</a>
+        </div>
+
+    </nav>
+
+
+    <!-- ==========================================
+         HERO
+    =========================================== -->
+
+    <header class="hero">
+
+        <div class="hero-badge">
+            Welcome to NexusXV
+        </div>
+
+        <h1>NexusXV</h1>
+
+        <p>
+            Welcome to my little corner of the internet.
+            Find my socials, gaming accounts, projects,
+            servers and other stuff all in one place.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a class="button button-primary" href="#socials">
+                Explore
+            </a>
+
+            <a class="button button-secondary" href="#projects">
+                My Projects
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <main>
+
+
+        <!-- ==========================================
+             SOCIALS
+             
+             ADD MORE SOCIALS HERE
+        =========================================== -->
+
+        <section id="socials">
+
+            <div class="section-heading">
+
+                <h2>My Socials</h2>
+
+                <p>
+                    Find me around the internet.
+                </p>
+
+            </div>
+
+
+            <div class="cards">
+
+
+                <!-- DISCORD -->
+
+                <a
+                    class="card"
+                    href="YOUR_DISCORD_LINK"
+                    target="_blank"
+                >
+
+                    <div class="card-icon">
+                        💬
+                    </div>
+
+                    <h3>My Discord Hangout Server</h3>
+
+                    <p>
+                        Hang out, chat and meet other people.
+                    </p>
+
+                    <div class="card-arrow">
+                        Join Discord →
+                    </div>
+
+                </a>
+
+
+                <!-- MINECRAFT DISCORD -->
+
+                <a
+                    class="card"
+                    href="YOUR_MINECRAFT_DISCORD_LINK"
+                    target="_blank"
+                >
+
+                    <div class="card-icon">
+                        ⛏️
+                    </div>
+
+                    <h3>My Minecraft DC Server</h3>
+
+                    <p>
+                        My Minecraft community and server.
+                    </p>
+
+                    <div class="card-arrow">
+                        Join Server →
+                    </div>
+
+                </a>
+
+
+                <!-- ROBLOX -->
+
+                <a
+                    class="card"
+                    href="https://www.roblox.com/users/1734187576/profile"
+                    target="_blank"
+                >
+
+                    <div class="card-icon">
+                        🎮
+                    </div>
+
+                    <h3>My Roblox Account</h3>
+
+                    <p>
+                        Check out my Roblox profile and games.
+                    </p>
+
+                    <div class="card-arrow">
+                        View Profile →
+                    </div>
+
+                </a>
+
+
+                <!-- YOUTUBE -->
+
+                <a
+                    class="card"
+                    href="https://www.youtube.com/@SomebodyElse123"
+                    target="_blank"
+                >
+
+                    <div class="card-icon">
+                        ▶️
+                    </div>
+
+                    <h3>YouTube</h3>
+
+                    <p>
+                        Videos, gaming and other content.
+                    </p>
+
+                    <div class="card-arrow">
+                        Visit Channel →
+                    </div>
+
+                </a>
+
+
+                <!-- GITHUB -->
+
+                <a
+                    class="card"
+                    href="https://github.com/NotExotic1"
+                    target="_blank"
+                >
+
+                    <div class="card-icon">
+                        💻
+                    </div>
+
+                    <h3>GitHub</h3>
+
+                    <p>
+                        My code, projects and development stuff.
+                    </p>
+
+                    <div class="card-arrow">
+                        View GitHub →
+                    </div>
+
+                </a>
+
+
+                <!-- ADD ANOTHER SOCIAL HERE -->
+
+                <!--
+
+                <a
+                    class="card"
+                    href="YOUR_LINK"
+                    target="_blank"
+                >
+
+                    <div class="card-icon">
+                        ⭐
+                    </div>
+
+                    <h3>Your Social</h3>
+
+                    <p>
+                        Your description here.
+                    </p>
+
+                    <div class="card-arrow">
+                        Visit →
+                    </div>
+
+                </a>
+
+                -->
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             GAMING
+        =========================================== -->
+
+        <section id="gaming">
+
+            <div class="section-heading">
+
+                <h2>Gaming</h2>
+
+                <p>
+                    Games, servers and gaming-related stuff.
+                </p>
+
+            </div>
+
+
+            <div class="cards">
+
+
+                <a
+                    class="card"
+                    href="YOUR_MINECRAFT_SERVER_LINK"
+                    target="_blank"
+                >
+
+                    <div class="card-icon">
+                        ⛏️
+                    </div>
+
+                    <h3>Minecraft Server</h3>
+
+                    <p>
+                        Connect to my Minecraft server.
+                    </p>
+
+                    <div class="card-arrow">
+                        View Server →
+                    </div>
+
+                </a>
+
+
+                <a
+                    class="card"
+                    href="YOUR_ROBLOX_GAMES_LINK"
+                    target="_blank"
+                >
+
+                    <div class="card-icon">
+                        🟥
+                    </div>
+
+                    <h3>My Roblox Games</h3>
+
+                    <p>
+                        Check out the Roblox games I've made.
+                    </p>
+
+                    <div class="card-arrow">
+                        View Games →
+                    </div>
+
+                </a>
+
+
+                <a
+                    class="card"
+                    href="YOUR_FORTNITE_LINK"
+                    target="_blank"
+                >
+
+                    <div class="card-icon">
+                        🎯
+                    </div>
+
+                    <h3>Fortnite</h3>
+
+                    <p>
+                        My Fortnite-related stuff.
+                    </p>
+
+                    <div class="card-arrow">
+                        View →
+                    </div>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             PROJECTS
+             
+             ADD YOUR PROJECTS HERE
+        =========================================== -->
+
+        <section id="projects">
+
+            <div class="section-heading">
+
+                <h2>My Projects</h2>
+
+                <p>
+                    Things I'm working on or have made.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <h2>NexusXV</h2>
+
+                <p>
+                    This website is part of my personal NexusXV
+                    project. More projects, games and random
+                    things will be added here over time.
+                </p>
+
+                <br>
+
+                <a
+                    class="button button-secondary"
+                    href="https://github.com/NotExotic1/NexusXV"
+                    target="_blank"
+                >
+                    View Source on GitHub
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             OTHER
+        =========================================== -->
+
+        <section id="other">
+
+            <div class="section-heading">
+
+                <h2>Other Stuff</h2>
+
+                <p>
+                    Everything else.
+                </p>
+
+            </div>
+
+
+            <div class="cards">
+
+
+                <a
+                    class="card"
+                    href="YOUR_CONTACT_LINK"
+                    target="_blank"
+                >
+
+                    <div class="card-icon">
+                        ✉️
+                    </div>
+
+                    <h3>Contact Me</h3>
+
+                    <p>
+                        Want to get in touch? Here's where to find me.
+                    </p>
+
+                    <div class="card-arrow">
+                        Contact →
+                    </div>
+
+                </a>
+
+
+                <a
+                    class="card"
+                    href="YOUR_LINK"
+                    target="_blank"
+                >
+
+                    <div class="card-icon">
+                        🌐
+                    </div>
+
+                    <h3>Something Else</h3>
+
+                    <p>
+                        Add anything you want here.
+                    </p>
+
+                    <div class="card-arrow">
+                        Open →
+                    </div>
+
+                </a>
+
+
+                <!--
+                    COPY THIS CARD TO ADD MORE:
+
+                    <a
+                        class="card"
+                        href="YOUR_LINK"
+                        target="_blank"
+                    >
+
+                        <div class="card-icon">
+                            ⭐
+                        </div>
+
+                        <h3>Title</h3>
+
+                        <p>
+                            Description.
+                        </p>
+
+                        <div class="card-arrow">
+                            Open →
+                        </div>
+
+                    </a>
+                -->
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- ==========================================
+         FOOTER
+    =========================================== -->
+
+    <footer>
+
+        © 2026 <strong>NexusXV</strong> · Built by me
+
+    </footer>
+
+
 </body>
 </html>
