@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberleek Links</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background: #0d0d0d;
+            color: #fff;
+        }
+
+        #links {
+            min-height: 100vh;
+            padding: 50px 25px;
+            background: #0d0d0d;
+        }
+
+        h1 {
+            margin: 0 0 20px;
+            font-size: 32px;
+        }
+
+        section {
+            max-width: 900px;
+            margin: 0 auto 45px;
+        }
+
+        .link {
+            display: block;
+            width: 100%;
+            margin: 12px 0;
+            padding: 18px 20px;
+            border: 1px solid #333;
+            border-radius: 10px;
+            background: #171717;
+            color: #fff;
+            text-decoration: none;
+            word-break: break-all;
+            transition: background 0.15s, transform 0.15s;
+        }
+
+        .link:hover {
+            background: #242424;
+            transform: translateY(-2px);
+        }
+
+        #viewer {
+            display: none;
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            border: 0;
+            background: #fff;
+            z-index: 999999;
+        }
+
+        #close {
+            display: none;
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            z-index: 1000000;
+            padding: 10px 15px;
+            border: 0;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        #close:hover {
+            background: #000;
+        }
+    </style>
+</head>
+<body>
+    <main id="links">
+        <section>
+            <h1>His Domains</h1>
+
+            <a class="link" href="https://cyberleek.turbo-gateway.com/" data-url="https://cyberleek.turbo-gateway.com/">
+                https://cyberleek.turbo-gateway.com/
+            </a>
+
+            <a class="link" href="https://cyberleek.vilenarios.com/" data-url="https://cyberleek.vilenarios.com/">
+                https://cyberleek.vilenarios.com/
+            </a>
+
+            <a class="link" href="https://cyberleek.ar.io/" data-url="https://cyberleek.ar.io/">
+                https://cyberleek.ar.io/
+            </a>
+        </section>
+
+        <section>
+            <h1>Other Things</h1>
+
+            <a class="link" href="https://j5x4hueypx3doz5xh6sxvrj2teyzt73ilyuiw4mgk2vegbmbjs6q.arweave.net/T2_D0Jh99jdntz-lesU6mTGZ_2heKItxhlaqQwWBTL0" data-url="https://j5x4hueypx3doz5xh6sxvrj2teyzt73ilyuiw4mgk2vegbmbjs6q.arweave.net/T2_D0Jh99jdntz-lesU6mTGZ_2heKItxhlaqQwWBTL0">
+                https://j5x4hueypx3doz5xh6sxvrj2teyzt73ilyuiw4mgk2vegbmbjs6q.arweave.net/T2_D0Jh99jdntz-lesU6mTGZ_2heKItxhlaqQwWBTL0
+            </a>
+
+            <a class="link" href="https://j5x4hueypx3doz5xh6sxvrj2teyzt73ilyuiw4mgk2vegbmbjs6q.arweave.net/cyberleek" data-url="https://j5x4hueypx3doz5xh6sxvrj2teyzt73ilyuiw4mgk2vegbmbjs6q.arweave.net/cyberleek">
+                https://j5x4hueypx3doz5xh6sxvrj2teyzt73ilyuiw4mgk2vegbmbjs6q.arweave.net/cyberleek
+            </a>
+        </section>
+    </main>
+
+    <iframe id="viewer" title="Embedded Website"></iframe>
+    <button id="close" type="button">✕ Close</button>
+
+    <script>
+        const links = document.querySelectorAll(".link");
+        const linksPage = document.getElementById("links");
+        const viewer = document.getElementById("viewer");
+        const close = document.getElementById("close");
+
+        links.forEach(link => {
+            link.addEventListener("click", event => {
+                event.preventDefault();
+
+                viewer.src = link.dataset.url;
+                linksPage.style.display = "none";
+                viewer.style.display = "block";
+                close.style.display = "block";
+            });
+        });
+
+        close.addEventListener("click", () => {
+            viewer.src = "about:blank";
+            viewer.style.display = "none";
+            close.style.display = "none";
+            linksPage.style.display = "block";
+        });
+    </script>
+</body>
+</html>
