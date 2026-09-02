@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CONNOR'S DOOMSDAY</title>
+
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap");
+
+        :root {
+            --bg: #020202;
+            --text: #d0d0d0;
+            --dim: #555;
+            --dark: #161616;
+            --red: #e00000;
+            --red-dark: #650000;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            position: relative;
+
+            overflow: hidden;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: var(--bg);
+            color: var(--text);
+
+            font-family:
+                "Share Tech Mono",
+                "Courier New",
+                monospace;
+
+            transition:
+                background 0.25s ease;
+        }
+
+        /* CRT scanlines */
+        body::before {
+            content: "";
+
+            position: fixed;
+            inset: 0;
+
+            pointer-events: none;
+            z-index: 100;
+
+            background:
+                repeating-linear-gradient(
+                    to bottom,
+                    rgba(255,255,255,0.025) 0px,
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px,
+                    transparent 4px
+                );
+        }
+
+        /* Screen vignette */
+        body::after {
+            content: "";
+
+            position: fixed;
+            inset: 0;
+
+            pointer-events: none;
+            z-index: 101;
+
+            background:
+                radial-gradient(
+                    ellipse at center,
+                    transparent 40%,
+                    rgba(0,0,0,0.8) 100%
+                );
+        }
+
+        /* Static/noise */
+        #noise {
+            position: fixed;
+            inset: -20%;
+
+            pointer-events: none;
+            z-index: 99;
+
+            opacity: 0.035;
+
+            background-image:
+                repeating-radial-gradient(
+                    circle at 20% 30%,
+                    white 0px,
+                    transparent 1px,
+                    transparent 3px
+                );
+
+            animation:
+                noise 0.12s steps(2) infinite;
+        }
+
+        @keyframes noise {
+            0% {
+                transform: translate(0,0);
+            }
+
+            25% {
+                transform: translate(-2%,1%);
+            }
+
+            50% {
+                transform: translate(1%,-2%);
+            }
+
+            75% {
+                transform: translate(2%,2%);
+            }
+
+            100% {
+                transform: translate(-1%,-1%);
+            }
+        }
+
+        #flash {
+            position: fixed;
+            inset: 0;
+
+            z-index: 200;
+
+            pointer-events: none;
+
+            opacity: 0;
+
+            background:
+                rgba(255,255,255,0.08);
+        }
+
+        #flash.active {
+            animation:
+                screenFlash 0.1s ease-out;
+        }
+
+        @keyframes screenFlash {
+            0% {
+                opacity: 0.25;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .container {
+            width: min(1100px, 92vw);
+        }
+
+        .terminal {
+            position: relative;
+
+            padding:
+                32px
+                40px
+                27px;
+
+            border:
+                1px solid
+                #272727;
+
+            background:
+                rgba(0,0,0,0.78);
+
+            box-shadow:
+                0 0 60px
+                rgba(255,255,255,0.018),
+
+                inset 0 0 80px
+                rgba(255,255,255,0.012);
+        }
+
+        .terminal::before,
+        .terminal::after {
+            content: "";
+
+            position: absolute;
+
+            width: 10px;
+            height: 10px;
+
+            border-color: #555;
+        }
+
+        .terminal::before {
+            left: -1px;
+            top: -1px;
+
+            border-left: 1px solid;
+            border-top: 1px solid;
+        }
+
+        .terminal::after {
+            right: -1px;
+            bottom: -1px;
+
+            border-right: 1px solid;
+            border-bottom: 1px solid;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 20px;
+
+            padding-bottom: 13px;
+            margin-bottom: 34px;
+
+            border-bottom:
+                1px solid
+                #1c1c1c;
+
+            color: var(--dim);
+
+            font-size: 11px;
+            letter-spacing: 3px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #ccc;
+
+            box-shadow:
+                0 0 8px
+                rgba(255,255,255,0.7);
+
+            animation:
+                statusBlink 2s infinite;
+        }
+
+        @keyframes statusBlink {
+            0%,
+            80%,
+            100% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 0.1;
+            }
+        }
+
+        .title {
+            margin-bottom: 7px;
+
+            color: #777;
+
+            font-size: 12px;
+            letter-spacing: 6px;
+        }
+
+        .doomsday {
+            margin-bottom: 38px;
+
+            color: #bdbdbd;
+
+            font-size:
+                clamp(
+                    28px,
+                    5vw,
+                    52px
+                );
+
+            letter-spacing: 7px;
+
+            text-transform: uppercase;
+
+            text-shadow:
+                0 0 15px
+                rgba(255,255,255,0.05);
+        }
+
+        .label {
+            margin-bottom: 17px;
+
+            color: #555;
+
+            font-size: 11px;
+
+            letter-spacing: 5px;
+        }
+
+        #countdown {
+            font-size:
+                clamp(
+                    45px,
+                    10vw,
+                    125px
+                );
+
+            line-height: 1;
+
+            white-space: nowrap;
+
+            letter-spacing: 6px;
+
+            font-variant-numeric:
+                tabular-nums;
+
+            text-shadow:
+                0 0 10px
+                rgba(255,255,255,0.14),
+
+                0 0 35px
+                rgba(255,255,255,0.035);
+        }
+
+        #countdown.tick {
+            animation:
+                countdownTick
+                0.13s
+                ease-out;
+        }
+
+        @keyframes countdownTick {
+            0% {
+                transform:
+                    scale(1.008);
+
+                text-shadow:
+                    0 0 20px
+                    rgba(255,255,255,0.4);
+            }
+
+            100% {
+                transform:
+                    scale(1);
+            }
+        }
+
+        .units {
+            margin-top: 15px;
+
+            color: #393939;
+
+            font-size: 10px;
+
+            letter-spacing: 6px;
+        }
+
+        .target {
+            margin-top: 40px;
+
+            color: #4e4e4e;
+
+            font-size: 11px;
+
+            letter-spacing: 2px;
+        }
+
+        #targetText {
+            color: #999;
+        }
+
+        .progress-container {
+            max-width: 780px;
+
+            margin:
+                36px
+                auto
+                0;
+
+            text-align: left;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+
+            margin-bottom: 8px;
+
+            color: #3f3f3f;
+
+            font-size: 9px;
+
+            letter-spacing: 2px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 4px;
+
+            overflow: hidden;
+
+            background: #111;
+        }
+
+        #progressBar {
+            width: 100%;
+            height: 100%;
+
+            background: #999;
+
+            transform-origin:
+                left center;
+
+            box-shadow:
+                0 0 10px
+                rgba(255,255,255,0.2);
+        }
+
+        #warning {
+            min-height: 18px;
+
+            margin-top: 28px;
+
+            color: #444;
+
+            font-size: 9px;
+
+            letter-spacing: 2px;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+
+            padding-top: 13px;
+            margin-top: 28px;
+
+            border-top:
+                1px solid
+                #171717;
+
+            color: #303030;
+
+            font-size: 8px;
+
+            letter-spacing: 2px;
+        }
+
+        /* FINAL MINUTE */
+
+        body.danger {
+            background:
+                #080000;
+        }
+
+        body.danger #countdown {
+            color: var(--red);
+
+            text-shadow:
+                0 0 10px
+                rgba(255,0,0,0.7),
+
+                0 0 40px
+                rgba(255,0,0,0.2);
+        }
+
+        body.danger #progressBar {
+            background: var(--red);
+
+            box-shadow:
+                0 0 15px
+                rgba(255,0,0,0.5);
+        }
+
+        body.danger .status-dot {
+            background: var(--red);
+
+            box-shadow:
+                0 0 14px
+                var(--red);
+        }
+
+        /* ZERO */
+
+        body.finished {
+            background:
+                #0b0000;
+        }
+
+        body.finished #countdown {
+            color: var(--red);
+
+            animation:
+                glitch
+                0.08s
+                infinite;
+
+            text-shadow:
+                0 0 10px
+                rgba(255,0,0,0.8),
+
+                0 0 45px
+                rgba(255,0,0,0.25);
+        }
+
+        body.finished #warning {
+            color: var(--red);
+        }
+
+        body.finished .status-dot {
+            background: var(--red);
+
+            box-shadow:
+                0 0 18px
+                var(--red);
+        }
+
+        @keyframes glitch {
+            0% {
+                transform:
+                    translate(0);
+            }
+
+            20% {
+                transform:
+                    translate(-2px,1px);
+            }
+
+            40% {
+                transform:
+                    translate(2px,-1px);
+            }
+
+            60% {
+                transform:
+                    translate(-1px,-1px);
+            }
+
+            80% {
+                transform:
+                    translate(1px,2px);
+            }
+
+            100% {
+                transform:
+                    translate(0);
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .terminal {
+                padding:
+                    25px
+                    16px;
+            }
+
+            .header {
+                font-size: 8px;
+
+                letter-spacing: 2px;
+            }
+
+            .doomsday {
+                letter-spacing: 3px;
+            }
+
+            #countdown {
+                letter-spacing: 2px;
+            }
+
+            .units {
+                letter-spacing: 2px;
+            }
+
+            .footer {
+                flex-direction: column;
+
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="noise"></div>
+    <div id="flash"></div>
+
+    <main class="container">
+
+        <section class="terminal">
+
+            <header class="header">
+
+                <span>
+                    DOOMSDAY SYSTEM // 01
+                </span>
+
+                <span class="status">
+
+                    <span
+                        class="status-dot"
+                    ></span>
+
+                    <span
+                        id="statusText"
+                    >
+                        ACTIVE
+                    </span>
+
+                </span>
+
+            </header>
+
+
+            <div class="title">
+                THE COUNTDOWN HAS BEGUN
+            </div>
+
+
+            <div class="doomsday">
+                CONNOR'S DOOMSDAY
+            </div>
+
+
+            <div class="label">
+                TIME REMAINING
+            </div>
+
+
+            <div id="countdown">
+                00:00:00
+            </div>
+
+
+            <div class="units">
+                HOURS&nbsp;&nbsp;&nbsp;
+                MINUTES&nbsp;&nbsp;&nbsp;
+                SECONDS
+            </div>
+
+
+            <div class="target">
+
+                DOOMSDAY //
+                <span id="targetText"></span>
+
+            </div>
+
+
+            <div class="progress-container">
+
+                <div class="progress-header">
+
+                    <span>
+                        TIME REMAINING
+                    </span>
+
+                    <span id="percentage">
+                        100.000%
+                    </span>
+
+                </div>
+
+
+                <div class="progress">
+
+                    <div
+                        id="progressBar"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <div id="warning"></div>
+
+
+            <footer class="footer">
+
+                <span id="localTime">
+                    LOCAL TIME // --:--:--
+                </span>
+
+                <span id="systemStatus">
+                    SYSTEM // MONITORING
+                </span>
+
+            </footer>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        /*
+        ========================================================
+                         DOOMSDAY CONFIG
+        ========================================================
+
+        EDIT THIS VALUE ONLY.
+
+        UK DATE FORMAT:
+
+            HH:MM DD/MM/YYYY
+
+        Example:
+
+            23:59 02/09/2026
+
+        This means:
+
+            23:59
+            2 September 2026
+
+        The timer calculates:
+
+            TARGET TIME - CURRENT TIME
+
+        So it ALWAYS counts DOWN toward the target.
+
+        ========================================================
+        */
+
+        const TARGET_DATE =
+            "23:59 02/09/2026";
+
+
+        /*
+        ========================================================
+                         OPTIONAL AUDIO
+        ========================================================
+
+        Put these files in the SAME folder as this HTML file:
+
+            tick.wav
+            tock.wav
+
+        They are OPTIONAL.
+
+        If either file does not exist, the timer simply
+        continues without making a sound.
+
+        The sequence is:
+
+            tick
+            tock
+            tick
+            tock
+            tick
+            tock
+
+        ========================================================
+        */
+
+        const TICK_SOUND =
+            "tick.wav";
+
+        const TOCK_SOUND =
+            "tock.wav";
+
+
+        /*
+        ========================================================
+                         ELEMENTS
+        ========================================================
+        */
+
+        const countdownElement =
+            document.getElementById(
+                "countdown"
+            );
+
+        const targetTextElement =
+            document.getElementById(
+                "targetText"
+            );
+
+        const percentageElement =
+            document.getElementById(
+                "percentage"
+            );
+
+        const progressBar =
+            document.getElementById(
+                "progressBar"
+            );
+
+        const warningElement =
+            document.getElementById(
+                "warning"
+            );
+
+        const statusTextElement =
+            document.getElementById(
+                "statusText"
+            );
+
+        const localTimeElement =
+            document.getElementById(
+                "localTime"
+            );
+
+        const systemStatusElement =
+            document.getElementById(
+                "systemStatus"
+            );
+
+        const flashElement =
+            document.getElementById(
+                "flash"
+            );
+
+
+        /*
+        ========================================================
+                         DATE PARSER
+        ========================================================
+        */
+
+        function parseUKDate(value) {
+
+            const match =
+                value
+                    .trim()
+                    .match(
+                        /^(\d{1,2}):(\d{2})\s+(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+                    );
+
+
+            if (!match) {
+
+                throw new Error(
+                    'Use "23:59 02/09/2026".'
+                );
+            }
+
+
+            const hour =
+                Number(match[1]);
+
+            const minute =
+                Number(match[2]);
+
+            const day =
+                Number(match[3]);
+
+            const month =
+                Number(match[4]);
+
+            const year =
+                Number(match[5]);
+
+
+            if (
+                hour < 0 ||
+                hour > 23 ||
+                minute < 0 ||
+                minute > 59 ||
+                day < 1 ||
+                day > 31 ||
+                month < 1 ||
+                month > 12
+            ) {
+
+                throw new Error(
+                    "Invalid date/time."
+                );
+            }
+
+
+            /*
+            JavaScript's Date constructor uses
+            the computer's local timezone.
+
+            */
+
+            const date =
+                new Date(
+                    year,
+                    month - 1,
+                    day,
+                    hour,
+                    minute,
+                    0,
+                    0
+                );
+
+
+            /*
+            Prevent invalid dates such as:
+
+                31/02/2026
+
+            from silently becoming another date.
+            */
+
+            if (
+                date.getFullYear() !== year ||
+                date.getMonth() !== month - 1 ||
+                date.getDate() !== day ||
+                date.getHours() !== hour ||
+                date.getMinutes() !== minute
+            ) {
+
+                throw new Error(
+                    "That is not a valid calendar date."
+                );
+            }
+
+
+            return date.getTime();
+        }
+
+
+        /*
+        ========================================================
+                         INITIALIZE
+        ========================================================
+        */
+
+        let targetTimestamp;
+
+
+        try {
+
+            targetTimestamp =
+                parseUKDate(
+                    TARGET_DATE
+                );
+
+        } catch (error) {
+
+            countdownElement.textContent =
+                "ERROR";
+
+            statusTextElement.textContent =
+                "FAULT";
+
+            warningElement.textContent =
+                error.message;
+
+            throw error;
+        }
+
+
+        targetTextElement.textContent =
+            TARGET_DATE;
+
+
+        /*
+        ========================================================
+                         AUDIO
+        ========================================================
+        */
+
+        /*
+        Audio files are loaded only when required.
+
+        If they don't exist, nothing happens.
+
+        */
+
+        let tickAudio = null;
+        let tockAudio = null;
+
+
+        function loadAudio() {
+
+            if (tickAudio === null) {
+
+                tickAudio =
+                    new Audio(
+                        TICK_SOUND
+                    );
+
+                tickAudio.preload =
+                    "auto";
+
+                tickAudio.onerror =
+                    function () {
+
+                        /*
+                        Ignore missing
+                        tick.wav.
+                        */
+
+                        tickAudio = false;
+                    };
+            }
+
+
+            if (tockAudio === null) {
+
+                tockAudio =
+                    new Audio(
+                        TOCK_SOUND
+                    );
+
+                tockAudio.preload =
+                    "auto";
+
+                tockAudio.onerror =
+                    function () {
+
+                        /*
+                        Ignore missing
+                        tock.wav.
+                        */
+
+                        tockAudio = false;
+                    };
+            }
+        }
+
+
+        /*
+        0 = tick
+        1 = tock
+        */
+
+        let soundIndex = 0;
+
+
+        function playClockSound() {
+
+            loadAudio();
+
+
+            const audio =
+                soundIndex === 0
+                    ? tickAudio
+                    : tockAudio;
+
+
+            soundIndex =
+                soundIndex === 0
+                    ? 1
+                    : 0;
+
+
+            /*
+            Missing audio is completely ignored.
+            */
+
+            if (
+                !audio ||
+                audio === false
+            ) {
+
+                return;
+            }
+
+
+            try {
+
+                audio.currentTime = 0;
+
+                const promise =
+                    audio.play();
+
+
+                if (
+                    promise &&
+                    typeof promise.catch ===
+                    "function"
+                ) {
+
+                    promise.catch(
+                        function () {
+                            /*
+                            Browser blocked
+                            playback.
+
+                            Ignore it.
+                            */
+                        }
+                    );
+                }
+
+            } catch (_) {
+
+                /*
+                Ignore any audio errors.
+                */
+            }
+        }
+
+
+        /*
+        ========================================================
+                         VISUAL TICK
+        ========================================================
+        */
+
+        function visualTick() {
+
+            countdownElement.classList.remove(
+                "tick"
+            );
+
+
+            void countdownElement.offsetWidth;
+
+
+            countdownElement.classList.add(
+                "tick"
+            );
+
+
+            flashElement.classList.remove(
+                "active"
+            );
+
+
+            void flashElement.offsetWidth;
+
+
+            flashElement.classList.add(
+                "active"
+            );
+        }
+
+
+        /*
+        ========================================================
+                         FORMAT TIME
+        ========================================================
+        */
+
+        function pad(number) {
+
+            return String(number)
+                .padStart(2, "0");
+        }
+
+
+        function formatCountdown(
+            milliseconds
+        ) {
+
+            /*
+            CEIL keeps the countdown synchronized
+            with the actual target timestamp.
+
+            */
+
+            const totalSeconds =
+                Math.max(
+                    0,
+                    Math.ceil(
+                        milliseconds / 1000
+                    )
+                );
+
+
+            const hours =
+                Math.floor(
+                    totalSeconds / 3600
+                );
+
+
+            const minutes =
+                Math.floor(
+                    (totalSeconds % 3600) / 60
+                );
+
+
+            const seconds =
+                totalSeconds % 60;
+
+
+            return (
+                pad(hours) +
+                ":" +
+                pad(minutes) +
+                ":" +
+                pad(seconds)
+            );
+        }
+
+
+        /*
+        ========================================================
+                         LOCAL CLOCK
+        ========================================================
+        */
+
+        function updateLocalClock() {
+
+            const now =
+                new Date();
+
+
+            const time =
+                pad(now.getHours()) +
+                ":" +
+                pad(now.getMinutes()) +
+                ":" +
+                pad(now.getSeconds());
+
+
+            localTimeElement.textContent =
+                "LOCAL TIME // " +
+                time;
+        }
+
+
+        /*
+        ========================================================
+                         FINISHED
+        ========================================================
+        */
+
+        let finished = false;
+
+
+        function finishCountdown() {
+
+            if (finished) {
+                return;
+            }
+
+
+            finished = true;
+
+
+            document.body.classList.remove(
+                "danger"
+            );
+
+
+            document.body.classList.add(
+                "finished"
+            );
+
+
+            countdownElement.textContent =
+                "00:00:00";
+
+
+            percentageElement.textContent =
+                "0.000%";
+
+
+            progressBar.style.transform =
+                "scaleX(0)";
+
+
+            statusTextElement.textContent =
+                "TERMINATED";
+
+
+            systemStatusElement.textContent =
+                "SYSTEM // DOOMSDAY REACHED";
+
+
+            warningElement.textContent =
+                "/// CONNOR'S DOOMSDAY HAS ARRIVED ///";
+        }
+
+
+        /*
+        ========================================================
+                         COUNTDOWN
+        ========================================================
+        */
+
+        let lastSecond = null;
+
+
+        /*
+        IMPORTANT:
+
+        startTimestamp is created BEFORE updateCountdown()
+        is ever called.
+
+        */
+
+        const startTimestamp =
+            Date.now();
+
+
+        const totalDuration =
+            Math.max(
+                1,
+                targetTimestamp -
+                startTimestamp
+            );
+
+
+        function updateCountdown() {
+
+            if (finished) {
+                return;
+            }
+
+
+            const now =
+                Date.now();
+
+
+            /*
+            THIS is the countdown calculation:
+
+                target - current time
+
+            */
+
+            const remaining =
+                targetTimestamp -
+                now;
+
+
+            updateLocalClock();
+
+
+            /*
+            Target reached.
+            */
+
+            if (
+                remaining <= 0
+            ) {
+
+                finishCountdown();
+
+                return;
+            }
+
+
+            /*
+            Determine the currently displayed
+            second.
+            */
+
+            const currentSecond =
+                Math.ceil(
+                    remaining / 1000
+                );
+
+
+            /*
+            Only play a sound when the second
+            actually changes.
+
+            This prevents the 50ms update loop
+            from playing 20 sounds per second.
+            */
+
+            if (
+                lastSecond !== null &&
+                currentSecond !==
+                    lastSecond
+            ) {
+
+                playClockSound();
+
+                visualTick();
+            }
+
+
+            lastSecond =
+                currentSecond;
+
+
+            countdownElement.textContent =
+                formatCountdown(
+                    remaining
+                );
+
+
+            /*
+            Progress bar.
+            */
+
+            const progress =
+                Math.max(
+                    0,
+                    Math.min(
+                        1,
+                        remaining /
+                        totalDuration
+                    )
+                );
+
+
+            progressBar.style.transform =
+                `scaleX(${progress})`;
+
+
+            percentageElement.textContent =
+                (
+                    progress * 100
+                ).toFixed(3) +
+                "%";
+
+
+            /*
+            Final minute.
+            */
+
+            if (
+                remaining <=
+                60 * 1000
+            ) {
+
+                document.body.classList.add(
+                    "danger"
+                );
+
+
+                if (
+                    currentSecond <= 10
+                ) {
+
+                    warningElement.textContent =
+                        `/// T-${currentSecond} ///`;
+
+                } else {
+
+                    warningElement.textContent =
+                        "/// DOOMSDAY APPROACHING ///";
+                }
+
+            } else {
+
+                document.body.classList.remove(
+                    "danger"
+                );
+
+                warningElement.textContent =
+                    "";
+            }
+        }
+
+
+        /*
+        ========================================================
+                     START THE SYSTEM
+        ========================================================
+        */
+
+        updateCountdown();
+
+
+        /*
+        Update frequently so the timer remains
+        synchronized with the actual clock.
+
+        The sound still only happens once per second.
+        */
+
+        setInterval(
+            updateCountdown,
+            50
+        );
+
+    </script>
+
+</body>
+</html>
